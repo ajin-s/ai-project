@@ -29,7 +29,6 @@ const Index = () => {
     setIsVisible(true);
   }, []);
 
-  // Initialize particles with color
   useEffect(() => {
     const initialParticles: Particle[] = Array.from({ length: 30 }, (_, i) => ({
       id: i,
@@ -45,7 +44,6 @@ const Index = () => {
     setParticles(initialParticles);
   }, []);
 
-  // Create random pulses
   useEffect(() => {
     const createPulse = () => {
       const newPulse = {
@@ -65,7 +63,6 @@ const Index = () => {
     return () => clearInterval(interval);
   }, []);
 
-  // Animate particles
   useEffect(() => {
     const animate = () => {
       setParticles(prevParticles => 
@@ -158,9 +155,7 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-blue-900 to-purple-900 text-white overflow-hidden">
-      {/* Enhanced AI Background */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {/* Neural Network Grid */}
         <div className="absolute inset-0 grid grid-cols-8 grid-rows-8">
           {Array.from({ length: 64 }).map((_, i) => (
             <motion.div
@@ -179,7 +174,6 @@ const Index = () => {
           ))}
         </div>
 
-        {/* Particle System */}
         <svg className="absolute w-full h-full">
           {particles.map((particle, index) => (
             <React.Fragment key={particle.id}>
@@ -223,7 +217,6 @@ const Index = () => {
           ))}
         </svg>
 
-        {/* Data Flow Lines */}
         <div className="absolute inset-0">
           {Array.from({ length: 8 }).map((_, i) => (
             <motion.div
@@ -244,7 +237,6 @@ const Index = () => {
           ))}
         </div>
 
-        {/* Circular Pulses */}
         {pulses.map(pulse => (
           <motion.div
             key={pulse.id}
@@ -268,7 +260,6 @@ const Index = () => {
         ))}
       </div>
 
-      {/* Enhanced Gradient Overlay */}
       <div 
         className="absolute inset-0 opacity-30 pointer-events-none"
         style={{
@@ -278,7 +269,6 @@ const Index = () => {
       />
 
       <main className="relative">
-        {/* Hero Section */}
         <div className="min-h-screen flex flex-col items-center justify-center px-4">
           <AnimatePresence>
             {isVisible && (
@@ -289,7 +279,6 @@ const Index = () => {
                   transition={{ duration: 0.8, type: "spring" }}
                   className="text-center mb-8 relative"
                 >
-                  {/* 3D Brain Visualization */}
                   <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 -z-10">
                     <motion.div
                       className="w-96 h-96 rounded-full bg-gradient-to-r from-purple-500/20 to-blue-500/20 blur-2xl"
@@ -305,61 +294,132 @@ const Index = () => {
                     />
                   </div>
                   
-                  <h1 className="text-7xl md:text-9xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-rose-400 via-fuchsia-500 to-indigo-500 relative z-10">
-                    TECHFEST
-                  </h1>
+                  <div className="relative">
+                    <motion.h1
+                      className="text-7xl md:text-9xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-rose-400 via-fuchsia-500 to-indigo-500 relative z-10"
+                      initial={{ y: -20 }}
+                      animate={{ y: 0 }}
+                      transition={{
+                        type: "spring",
+                        stiffness: 100,
+                        damping: 10
+                      }}
+                    >
+                      <motion.span
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ duration: 0.5, delay: 0.2 }}
+                      >
+                        T
+                      </motion.span>
+                      <motion.span
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ duration: 0.5, delay: 0.3 }}
+                      >
+                        E
+                      </motion.span>
+                      <motion.span
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ duration: 0.5, delay: 0.4 }}
+                      >
+                        C
+                      </motion.span>
+                      <motion.span
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ duration: 0.5, delay: 0.5 }}
+                      >
+                        H
+                      </motion.span>
+                      <motion.span
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ duration: 0.5, delay: 0.6 }}
+                      >
+                        F
+                      </motion.span>
+                      <motion.span
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ duration: 0.5, delay: 0.7 }}
+                      >
+                        E
+                      </motion.span>
+                      <motion.span
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ duration: 0.5, delay: 0.8 }}
+                      >
+                        S
+                      </motion.span>
+                      <motion.span
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ duration: 0.5, delay: 0.9 }}
+                      >
+                        T
+                      </motion.span>
+                    </motion.h1>
+                  </div>
+
                   <motion.div
                     initial={{ y: 20, opacity: 0 }}
                     animate={{ y: 0, opacity: 1 }}
-                    transition={{ delay: 0.3 }}
+                    transition={{ 
+                      delay: 1,
+                      type: "spring",
+                      stiffness: 100
+                    }}
                     className="text-2xl md:text-3xl font-light text-rose-200 mb-8"
                   >
                     Where Innovation Meets Tomorrow
-                  </motion.div>
-
-                  {/* Neural Network Visualization */}
-                  <motion.div
-                    className="absolute inset-0 -z-10"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 0.5 }}
-                  >
-                    <div className="grid grid-cols-3 gap-4 opacity-20">
-                      {Array.from({ length: 9 }).map((_, i) => (
-                        <motion.div
-                          key={i}
-                          className="w-4 h-4 bg-white rounded-full"
-                          animate={{
-                            scale: [1, 1.5, 1],
-                            opacity: [0.5, 1, 0.5],
-                          }}
-                          transition={{
-                            duration: 2,
-                            delay: i * 0.2,
-                            repeat: Infinity,
-                          }}
-                        />
-                      ))}
-                    </div>
                   </motion.div>
                 </motion.div>
 
                 <motion.div
                   initial={{ y: 20, opacity: 0 }}
                   animate={{ y: 0, opacity: 1 }}
-                  transition={{ delay: 0.6 }}
+                  transition={{ delay: 1.2 }}
                   className="flex flex-col items-center gap-4"
                 >
-                  <p className="text-xl text-gray-300 max-w-2xl text-center">
+                  <motion.p
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 0.5, delay: 1.4 }}
+                    className="text-xl text-gray-300 max-w-2xl text-center"
+                  >
                     April 15-18, 2025 • Tech University Campus
-                  </p>
+                  </motion.p>
+                  
                   <motion.button
                     onClick={handleRegisterClick}
-                    whileHover={{ scale: 1.05 }}
+                    className="relative px-8 py-4 rounded-full bg-gradient-to-r from-rose-500 to-purple-600 text-white font-semibold text-lg shadow-lg group overflow-hidden"
+                    whileHover={{ 
+                      scale: 1.05,
+                      boxShadow: "0 0 20px rgba(255,255,255,0.2)"
+                    }}
                     whileTap={{ scale: 0.95 }}
-                    className="px-8 py-4 rounded-full bg-gradient-to-r from-rose-500 to-purple-600 text-white font-semibold text-lg shadow-lg hover:shadow-xl transition-shadow duration-300"
                   >
-                    Register Now
+                    <motion.span
+                      className="relative z-10 inline-flex items-center"
+                      whileHover={{ x: 5 }}
+                      transition={{ type: "spring", stiffness: 200 }}
+                    >
+                      Register Now
+                      <motion.span
+                        className="ml-2"
+                        whileHover={{ x: 5 }}
+                        transition={{ type: "spring", stiffness: 200 }}
+                      >
+                        <ChevronRight className="w-5 h-5" />
+                      </motion.span>
+                    </motion.span>
+                    <motion.div
+                      className="absolute inset-0 bg-gradient-to-r from-purple-600 to-rose-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                      initial={false}
+                    />
                   </motion.button>
                 </motion.div>
               </>
@@ -367,7 +427,6 @@ const Index = () => {
           </AnimatePresence>
         </div>
 
-        {/* Events Section - Only shown after clicking Register Now */}
         <AnimatePresence>
           {showEvents && (
             <motion.div
