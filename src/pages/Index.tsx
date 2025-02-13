@@ -24,6 +24,7 @@ const Index = () => {
   const [particles, setParticles] = useState<Particle[]>([]);
   const [pulses, setPulses] = useState<Pulse[]>([]);
   const [isVisible, setIsVisible] = useState(false);
+  const [showEvents, setShowEvents] = useState(false);
 
   useEffect(() => {
     setIsVisible(true);
@@ -149,6 +150,13 @@ const Index = () => {
     }
   ];
 
+  const handleRegisterClick = () => {
+    setShowEvents(true);
+    setTimeout(() => {
+      document.getElementById('events-section')?.scrollIntoView({ behavior: 'smooth' });
+    }, 100);
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-blue-900 to-purple-900 text-white overflow-hidden">
       {/* AI Background */}
@@ -236,9 +244,25 @@ const Index = () => {
                   initial={{ scale: 0.9, opacity: 0 }}
                   animate={{ scale: 1, opacity: 1 }}
                   transition={{ duration: 0.8, type: "spring" }}
-                  className="text-center mb-8"
+                  className="text-center mb-8 relative"
                 >
-                  <h1 className="text-7xl md:text-9xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-rose-400 via-fuchsia-500 to-indigo-500">
+                  {/* 3D Brain Visualization */}
+                  <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 -z-10">
+                    <motion.div
+                      className="w-96 h-96 rounded-full bg-gradient-to-r from-purple-500/20 to-blue-500/20 blur-2xl"
+                      animate={{
+                        scale: [1, 1.2, 1],
+                        rotate: [0, 180, 360],
+                      }}
+                      transition={{
+                        duration: 20,
+                        repeat: Infinity,
+                        ease: "linear"
+                      }}
+                    />
+                  </div>
+                  
+                  <h1 className="text-7xl md:text-9xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-rose-400 via-fuchsia-500 to-indigo-500 relative z-10">
                     TECHFEST
                   </h1>
                   <motion.div
@@ -248,6 +272,32 @@ const Index = () => {
                     className="text-2xl md:text-3xl font-light text-rose-200 mb-8"
                   >
                     Where Innovation Meets Tomorrow
+                  </motion.div>
+
+                  {/* Neural Network Visualization */}
+                  <motion.div
+                    className="absolute inset-0 -z-10"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 0.5 }}
+                  >
+                    <div className="grid grid-cols-3 gap-4 opacity-20">
+                      {Array.from({ length: 9 }).map((_, i) => (
+                        <motion.div
+                          key={i}
+                          className="w-4 h-4 bg-white rounded-full"
+                          animate={{
+                            scale: [1, 1.5, 1],
+                            opacity: [0.5, 1, 0.5],
+                          }}
+                          transition={{
+                            duration: 2,
+                            delay: i * 0.2,
+                            repeat: Infinity,
+                          }}
+                        />
+                      ))}
+                    </div>
                   </motion.div>
                 </motion.div>
 
@@ -261,6 +311,7 @@ const Index = () => {
                     April 15-18, 2025 • Tech University Campus
                   </p>
                   <motion.button
+                    onClick={handleRegisterClick}
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                     className="px-8 py-4 rounded-full bg-gradient-to-r from-rose-500 to-purple-600 text-white font-semibold text-lg shadow-lg hover:shadow-xl transition-shadow duration-300"
@@ -273,97 +324,70 @@ const Index = () => {
           </AnimatePresence>
         </div>
 
-        {/* About Section */}
-        <section className="py-20 px-4">
-          <motion.div
-            initial={{ y: 50, opacity: 0 }}
-            whileInView={{ y: 0, opacity: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-            className="max-w-4xl mx-auto text-center"
-          >
-            <h2 className="text-4xl md:text-5xl font-bold mb-8 bg-clip-text text-transparent bg-gradient-to-r from-rose-400 to-purple-500">
-              About The Event
-            </h2>
-            <p className="text-xl text-gray-300 mb-8">
-              TechFest 2025 is the pinnacle of technological celebration, bringing together the brightest minds 
-              from across the nation. Experience four days of innovation, competition, and inspiration as we 
-              explore the frontiers of technology and artificial intelligence.
-            </p>
-            <p className="text-lg text-gray-400">
-              Join thousands of tech enthusiasts, industry leaders, and fellow students in this grand celebration 
-              of technology and innovation. From cutting-edge workshops to thrilling competitions, TechFest 2025 
-              promises an unforgettable journey into the future of technology.
-            </p>
-          </motion.div>
-        </section>
-
-        {/* Events Section */}
-        <section className="py-20 px-4">
-          <motion.h2
-            initial={{ y: 30, opacity: 0 }}
-            whileInView={{ y: 0, opacity: 1 }}
-            viewport={{ once: true }}
-            className="text-4xl md:text-5xl font-bold text-center mb-16 bg-clip-text text-transparent bg-gradient-to-r from-rose-400 to-purple-500"
-          >
-            Featured Events
-          </motion.h2>
-          <div className="max-w-7xl mx-auto grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {events.map((event, index) => (
-              <motion.div
-                key={index}
-                initial={{ y: 50, opacity: 0 }}
-                whileInView={{ y: 0, opacity: 1 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="group relative overflow-hidden rounded-xl bg-white/10 backdrop-blur-sm border border-white/10 hover:border-white/20 transition-colors duration-300"
-              >
-                <div className="aspect-video overflow-hidden">
-                  <img
-                    src={event.image}
-                    alt={event.title}
-                    className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500"
-                  />
+        {/* Events Section - Only shown after clicking Register Now */}
+        <AnimatePresence>
+          {showEvents && (
+            <motion.div
+              initial={{ opacity: 0, y: 100 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 100 }}
+              transition={{ duration: 0.5 }}
+              id="events-section"
+            >
+              <section className="py-20 px-4">
+                <motion.h2
+                  initial={{ y: 30, opacity: 0 }}
+                  whileInView={{ y: 0, opacity: 1 }}
+                  viewport={{ once: true }}
+                  className="text-4xl md:text-5xl font-bold text-center mb-16 bg-clip-text text-transparent bg-gradient-to-r from-rose-400 to-purple-500"
+                >
+                  Featured Events
+                </motion.h2>
+                <div className="max-w-7xl mx-auto grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                  {events.map((event, index) => (
+                    <motion.div
+                      key={index}
+                      initial={{ y: 50, opacity: 0 }}
+                      whileInView={{ y: 0, opacity: 1 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.5, delay: index * 0.1 }}
+                      className="group relative overflow-hidden rounded-xl bg-white/10 backdrop-blur-sm border border-white/10 hover:border-white/20 transition-colors duration-300"
+                    >
+                      <div className="aspect-video overflow-hidden">
+                        <img
+                          src={event.image}
+                          alt={event.title}
+                          className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500"
+                        />
+                      </div>
+                      <div className="p-6">
+                        <div className="flex items-center gap-3 mb-4">
+                          <div className="p-2 rounded-lg bg-rose-500/20">
+                            {event.icon}
+                          </div>
+                          <h3 className="text-xl font-semibold">{event.title}</h3>
+                        </div>
+                        <p className="text-gray-300 mb-4">{event.description}</p>
+                        <p className="text-rose-300 mb-4">{event.date}</p>
+                        <motion.a
+                          href={event.formLink}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          whileHover={{ scale: 1.05 }}
+                          whileTap={{ scale: 0.95 }}
+                          className="inline-flex items-center px-4 py-2 rounded-lg bg-gradient-to-r from-rose-500 to-purple-600 text-white font-semibold text-sm shadow-lg hover:shadow-xl transition-shadow duration-300"
+                        >
+                          Register Now <ChevronRight className="ml-2 w-4 h-4" />
+                        </motion.a>
+                      </div>
+                    </motion.div>
+                  ))}
                 </div>
-                <div className="p-6">
-                  <div className="flex items-center gap-3 mb-4">
-                    <div className="p-2 rounded-lg bg-rose-500/20">
-                      {event.icon}
-                    </div>
-                    <h3 className="text-xl font-semibold">{event.title}</h3>
-                  </div>
-                  <p className="text-gray-300 mb-4">{event.description}</p>
-                  <p className="text-rose-300 mb-4">{event.date}</p>
-                  <motion.a
-                    href={event.formLink}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    className="inline-flex items-center px-4 py-2 rounded-lg bg-gradient-to-r from-rose-500 to-purple-600 text-white font-semibold text-sm shadow-lg hover:shadow-xl transition-shadow duration-300"
-                  >
-                    Register Now <ChevronRight className="ml-2 w-4 h-4" />
-                  </motion.a>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </section>
+              </section>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </main>
-
-      <style jsx global>{`
-        @keyframes gradientShift {
-          0% {
-            transform: rotate(0deg) scale(1);
-          }
-          50% {
-            transform: rotate(180deg) scale(1.5);
-          }
-          100% {
-            transform: rotate(360deg) scale(1);
-          }
-        }
-      `}</style>
     </div>
   );
 }
