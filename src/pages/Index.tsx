@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Terminal, Code, Cpu, Network, Bot, Microscope, ChevronRight } from 'lucide-react';
 
@@ -9,6 +9,8 @@ interface Particle {
   size: number;
   velocity: { x: number; y: number };
   hue: number;
+  targetX?: number;
+  targetY?: number;
 }
 
 interface Pulse {
@@ -24,9 +26,68 @@ const Index = () => {
   const [pulses, setPulses] = useState<Pulse[]>([]);
   const [isVisible, setIsVisible] = useState(false);
   const [showEvents, setShowEvents] = useState(false);
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
 
   useEffect(() => {
     setIsVisible(true);
+  }, []);
+
+  const handleMouseMove = useCallback((e: React.MouseEvent) => {
+    setMousePos({ x: e.clientX, y: e.clientY });
+    
+    setParticles(prevParticles => 
+      prevParticles.map(particle => {
+        const dx = e.clientX - particle.x;
+        const dy = e.clientY - particle.y;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+        
+        if (distance < 100) {
+          const angle = Math.atan2(dy, dx);
+          const repulsionForce = (100 - distance) / 100;
+          
+          return {
+            ...particle,
+            velocity: {
+              x: particle.velocity.x - Math.cos(angle) * repulsionForce * 2,
+              y: particle.velocity.y - Math.sin(angle) * repulsionForce * 2
+            }
+          };
+        }
+        return particle;
+      })
+    );
+  }, []);
+
+  const handleClick = useCallback((e: React.MouseEvent) => {
+    const newPulse = {
+      id: Date.now(),
+      x: e.clientX,
+      y: e.clientY,
+      scale: 0,
+      opacity: 0.5
+    };
+    setPulses(prev => [...prev, newPulse]);
+
+    setParticles(prevParticles =>
+      prevParticles.map(particle => {
+        const dx = e.clientX - particle.x;
+        const dy = e.clientY - particle.y;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+        const angle = Math.atan2(dy, dx);
+        
+        return {
+          ...particle,
+          velocity: {
+            x: particle.velocity.x - Math.cos(angle) * (200 / (distance + 1)),
+            y: particle.velocity.y - Math.sin(angle) * (200 / (distance + 1))
+          }
+        };
+      })
+    );
+
+    setTimeout(() => {
+      setPulses(prev => prev.filter(p => p.id !== newPulse.id));
+    }, 2000);
   }, []);
 
   useEffect(() => {
@@ -45,25 +106,6 @@ const Index = () => {
   }, []);
 
   useEffect(() => {
-    const createPulse = () => {
-      const newPulse = {
-        id: Date.now(),
-        x: Math.random() * window.innerWidth,
-        y: Math.random() * window.innerHeight,
-        scale: 0,
-        opacity: 0.5
-      };
-      setPulses(prev => [...prev, newPulse]);
-      setTimeout(() => {
-        setPulses(prev => prev.filter(p => p.id !== newPulse.id));
-      }, 2000);
-    };
-
-    const interval = setInterval(createPulse, 1000);
-    return () => clearInterval(interval);
-  }, []);
-
-  useEffect(() => {
     const animate = () => {
       setParticles(prevParticles => 
         prevParticles.map(particle => {
@@ -71,13 +113,16 @@ const Index = () => {
           let newY = particle.y + particle.velocity.y;
 
           if (newX < 0 || newX > window.innerWidth) {
-            particle.velocity.x *= -1;
+            particle.velocity.x *= -0.5;
             newX = particle.x;
           }
           if (newY < 0 || newY > window.innerHeight) {
-            particle.velocity.y *= -1;
+            particle.velocity.y *= -0.5;
             newY = particle.y;
           }
+
+          particle.velocity.x *= 0.99;
+          particle.velocity.y *= 0.99;
 
           const newHue = (particle.hue + 0.1) % 360;
 
@@ -91,7 +136,7 @@ const Index = () => {
       );
     };
 
-    const animationInterval = setInterval(animate, 30);
+    const animationInterval = setInterval(animate, 16);
     return () => clearInterval(animationInterval);
   }, []);
 
@@ -116,7 +161,7 @@ const Index = () => {
       icon: <Cpu className="w-8 h-8" />,
       title: "RoboWars",
       description: "Battle of autonomous robots",
-      image: "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&q=80",
+      image: "https://images.unsplash.com/photo-1485826039-bfc35e0f1ea8?auto=format&fit=crop&q=80",
       date: "April 16, 2025",
       formLink: "https://forms.google.com/..."
     },
@@ -154,7 +199,11 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-blue-900 to-purple-900 text-white overflow-hidden">
+    <div 
+      className="min-h-screen bg-gradient-to-br from-gray-900 via-blue-900 to-purple-900 text-white overflow-hidden"
+      onMouseMove={handleMouseMove}
+      onClick={handleClick}
+    >
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute inset-0 grid grid-cols-8 grid-rows-8">
           {Array.from({ length: 64 }).map((_, i) => (
