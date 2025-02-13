@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Terminal, Code, Cpu, Network, Bot, Microscope, ChevronRight } from 'lucide-react';
@@ -159,8 +158,28 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-blue-900 to-purple-900 text-white overflow-hidden">
-      {/* AI Background */}
+      {/* Enhanced AI Background */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        {/* Neural Network Grid */}
+        <div className="absolute inset-0 grid grid-cols-8 grid-rows-8">
+          {Array.from({ length: 64 }).map((_, i) => (
+            <motion.div
+              key={i}
+              className="relative"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: [0.1, 0.3, 0.1] }}
+              transition={{
+                duration: 2 + Math.random() * 3,
+                repeat: Infinity,
+                delay: Math.random() * 2,
+              }}
+            >
+              <div className="absolute w-2 h-2 bg-blue-400 rounded-full transform -translate-x-1/2 -translate-y-1/2" />
+            </motion.div>
+          ))}
+        </div>
+
+        {/* Particle System */}
         <svg className="absolute w-full h-full">
           {particles.map((particle, index) => (
             <React.Fragment key={particle.id}>
@@ -202,30 +221,54 @@ const Index = () => {
               />
             </React.Fragment>
           ))}
-          {pulses.map(pulse => (
-            <motion.circle
-              key={pulse.id}
-              cx={pulse.x}
-              cy={pulse.y}
-              r="2"
-              fill="none"
-              stroke="rgba(100, 200, 255, 0.5)"
-              strokeWidth="1"
-              initial={{ scale: 0, opacity: 0.5 }}
+        </svg>
+
+        {/* Data Flow Lines */}
+        <div className="absolute inset-0">
+          {Array.from({ length: 8 }).map((_, i) => (
+            <motion.div
+              key={i}
+              className="absolute h-px w-full bg-gradient-to-r from-transparent via-blue-400/30 to-transparent"
+              style={{ top: `${(i + 1) * 12.5}%` }}
               animate={{
-                scale: [0, 15],
-                opacity: [0.5, 0],
+                x: ["-100%", "100%"],
+                opacity: [0, 1, 0],
               }}
               transition={{
-                duration: 2,
-                ease: "easeOut",
+                duration: 3 + Math.random() * 2,
+                repeat: Infinity,
+                delay: i * 0.5,
+                ease: "linear",
               }}
             />
           ))}
-        </svg>
+        </div>
+
+        {/* Circular Pulses */}
+        {pulses.map(pulse => (
+          <motion.div
+            key={pulse.id}
+            className="absolute rounded-full border border-blue-400/30"
+            style={{
+              left: pulse.x,
+              top: pulse.y,
+              transform: 'translate(-50%, -50%)',
+            }}
+            initial={{ width: 0, height: 0, opacity: 0.5 }}
+            animate={{
+              width: ["0px", "300px"],
+              height: ["0px", "300px"],
+              opacity: [0.5, 0],
+            }}
+            transition={{
+              duration: 2,
+              ease: "easeOut",
+            }}
+          />
+        ))}
       </div>
 
-      {/* Gradient Overlay */}
+      {/* Enhanced Gradient Overlay */}
       <div 
         className="absolute inset-0 opacity-30 pointer-events-none"
         style={{
@@ -393,3 +436,17 @@ const Index = () => {
 }
 
 export default Index;
+
+<style jsx>{`
+  @keyframes gradientShift {
+    0% {
+      transform: rotate(0deg) scale(1);
+    }
+    50% {
+      transform: rotate(180deg) scale(1.5);
+    }
+    100% {
+      transform: rotate(360deg) scale(1);
+    }
+  }
+`}</style>
